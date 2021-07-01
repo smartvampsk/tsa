@@ -3,19 +3,18 @@
 namespace Database\Factories;
 
 use App\Models\Article;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ArticleFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $images = ['image1.jpeg', 'image2.jpeg', 'image3.jpeg', 'image4.jpeg', 'image5.jpeg'];
-
-    protected $model = Article::class;
+    protected $model = Comment::class;
 
     /**
      * Define the model's default state.
@@ -25,12 +24,13 @@ class ArticleFactory extends Factory
     public function definition()
     {
         $users = User::latest()->pluck('id');
+        $articles = Article::latest()->pluck('id');
+
         return [
             'user_id' => $this->faker->randomElement($users),
-            'title' => $this->faker->sentence(rand(8, 11)),
-            'sub_title' => $this->faker->sentence(rand(13, 18)),
-            'content' => $this->faker->paragraph(),
-            'image' => $this->images[rand(0, 4)],
+            'comment' => $this->faker->sentence(rand(13, 18)),
+            'commentable_id' => $this->faker->randomElement($articles),
+            'commentable_type' => 'App\Models\Article',
         ];
     }
 }

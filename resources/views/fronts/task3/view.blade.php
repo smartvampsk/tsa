@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Task One')
+@section('title', 'Task Three')
 
 @section('content')
     <section class="pb-4">
@@ -12,14 +12,14 @@
                     </div>
                     <img src="{{ asset('images/'.$article->image) }}" class="card-img-top" alt="...">
                     <div class="card-body">
-                        {!! $article->content !!}
+                        {!! \Str::limit($article->content, 500) !!}
                     </div>
                     <div class="card-footer d-flex justify-content-between items-center">
                         <div class="text-muted">
                             By: <a href="">{{ $article->user->name }}</a>
                         </div>
                         <div class="text-muted">
-                            <span class="pe-4"><i class="fas fa fa-comment pe-1"></i> 1</span>
+                            <span class="pe-4"><i class="fas fa fa-comment pe-1"></i> {{ $comments->count() }}</span>
                             Last updated: {{ $article->updated_at->diffForHumans() }}
                         </div>
                     </div>
@@ -27,11 +27,41 @@
 
                 <div class="card mt-4">
                     <div class="card-header"><i class="fas fa fa-comment pe-2"></i>Comments</div>
-                    <div class="card-body"></div>
+                    <div class="">
+                        @if($article->comments->count() < 1)
+                            <p class="p-4 mb-0">No Comments yet</p>
+                        @endif
+                        @foreach($article->comments as $comment)
+                            <div class="px-4 pt-4 border-bottom">
+                                <div class="d-flex items-center">
+                                    <p class="mb-0"><i
+                                            class="fas fa fa-user-circle pe-2"></i> {{ $comment->user->name }}</p>
+                                    <p class="mb-0 small ps-5">
+                                        <i class="fas fa fa-clock pe-2"></i>
+                                        {{ $comment->created_at->diffForHumans() }}
+                                    </p>
+                                </div>
+
+                                <div class="mt-1">
+                                    <p class="mb-0">{{ $comment->comment }}</p>
+                                    <p class="text-muted small">Commentator Detail: {{ $comment->user }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
             <div class="col-4">
+                <div class="card mb-4">
+                    <div class="card-header"><i class="fas fa fa-book-open pe-2"></i>Article array by Author
+                        <span class="text-muted">({{$article->user->name}})</span>
+                    </div>
+                    <div class="card-body">
+                        {{ $articlesByAuthor }}
+                    </div>
+                </div>
+
                 <h4 class="bg-light py-2 px-3 rounded">Latest Articles</h4>
                 <ul class="list-group">
                     @foreach($articles as $article)

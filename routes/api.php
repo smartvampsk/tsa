@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TaskTwoController;
+use App\Http\Middleware\EnsureTokenIsValid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware(EnsureTokenIsValid::class)->group(function () {
+    Route::get('task2', [TaskTwoController::class, 'validateData'])->name('api.task2');
 });

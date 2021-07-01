@@ -3,6 +3,8 @@
 
 @section('content')
     <section>
-        Task 2
+        <div class="p-4 bg-light">
+            Api Part
+        </div>
     </section>
 @endsection
